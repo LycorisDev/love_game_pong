@@ -1,3 +1,5 @@
+default_speed = 2
+
 pad1 = {}
 pad1.x = 0
 pad1.y = 0
@@ -22,6 +24,23 @@ function love.load()
 end
 
 function love.update(dt)
+    -- Pad 1 controls
+    -- "E" for up and "C" for down, because they are at the same place on both QWERTY and AZERTY keyboards
+    if love.keyboard.isDown("e") and pad1.y > 0 then
+        pad1.y = pad1.y - default_speed
+    end
+    if love.keyboard.isDown("c") and pad1.y < love.graphics.getHeight() - pad1.height then
+        pad1.y = pad1.y + default_speed
+    end
+
+    -- Pad 2 controls
+    -- "Up arrow" and "Down arrow"
+    if love.keyboard.isDown("up") and pad2.y > 0 then
+        pad2.y = pad2.y - default_speed
+    end
+    if love.keyboard.isDown("down") and pad2.y < love.graphics.getHeight() - pad2.height then
+        pad2.y = pad2.y + default_speed
+    end
 end
 
 function love.draw()
