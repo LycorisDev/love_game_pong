@@ -3,20 +3,28 @@ default_speed = 2
 
 pad1 = {}
 pad1.x = screen_padding
-pad1.y = screen_padding
+-- pad1.y
 pad1.width = 20
 pad1.height = 80
 
 pad2 = {}
-pad2.y = screen_padding
+-- pad2.x
+-- pad2.y
 pad2.width = 20
 pad2.height = 80
 
 ball = {}
+-- ball.x
+-- ball.y
 ball.width = 20
 ball.height = 20
 ball.speed_x = default_speed
 ball.speed_y = default_speed
+
+function center_pads()
+    pad1.y = love.graphics.getHeight() / 2 - pad1.height / 2
+    pad2.y = love.graphics.getHeight() / 2 - pad2.height / 2
+end
 
 function center_ball()
     ball.x = love.graphics.getWidth() / 2 - ball.width / 2
@@ -24,8 +32,9 @@ function center_ball()
 end
 
 function love.load()
-    -- pad2.x, ball.x and ball.y are set in load() because getWidth() and getHeight() are initialized here
+    -- Set in load() because getWidth() and getHeight() are initialized here
     pad2.x = love.graphics.getWidth() - screen_padding - pad2.width
+    center_pads()
     center_ball()
 end
 
