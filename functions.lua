@@ -7,13 +7,13 @@ function start_game(nbr_player)
 
     -- Ball goes towards player 2
     if nbr_player == 1 then
-        ball.speed_x = default_speed
-        ball.speed_y = default_speed
+        ball.speed_x = ball_speed
+        ball.speed_y = ball_speed
     end
     -- Ball goes towards player 1
     if nbr_player == 2 then
-        ball.speed_x = -default_speed
-        ball.speed_y = -default_speed
+        ball.speed_x = -ball_speed
+        ball.speed_y = -ball_speed
     end
 end
 

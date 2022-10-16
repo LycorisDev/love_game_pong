@@ -1,7 +1,8 @@
 require("functions")
 
 screen_padding = 10
-default_speed = 3
+pad_speed = 5
+ball_speed = 3
 
 score1 = 0
 score2 = 0
@@ -23,8 +24,8 @@ ball = {}
 -- ball.y
 ball.width = 20
 ball.height = 20
-ball.speed_x = default_speed
-ball.speed_y = default_speed
+ball.speed_x = ball_speed
+ball.speed_y = ball_speed
 
 arr_ball_trail = {}
 
@@ -55,23 +56,23 @@ function love.update(dt)
     -- PAD 1 CONTROLS
     -- "E" for up and "C" for down, because they are at the same place on both QWERTY and AZERTY keyboards
     if love.keyboard.isDown("e") and pad1.y > screen_padding then
-        pad1.y = pad1.y - default_speed
+        pad1.y = pad1.y - pad_speed
     end
     if love.keyboard.isDown("c") and pad1.y < love.graphics.getHeight() - screen_padding - pad1.height then
-        pad1.y = pad1.y + default_speed
+        pad1.y = pad1.y + pad_speed
     end
 
     -- PAD 2 CONTROLS
     -- "Up arrow" and "Down arrow"
     if love.keyboard.isDown("up") and pad2.y > screen_padding then
-        pad2.y = pad2.y - default_speed
+        pad2.y = pad2.y - pad_speed
     end
     if love.keyboard.isDown("down") and pad2.y < love.graphics.getHeight() - screen_padding - pad2.height then
-        pad2.y = pad2.y + default_speed
+        pad2.y = pad2.y + pad_speed
     end
 
     -- BOUNCE THE BALL AGAINST THE LEFT SIDE OF THE SCREEN
-    if ball.speed_x ~= default_speed then
+    if ball.speed_x ~= ball_speed then
         if ball.x <= pad1.x + pad1.width and ball.y + ball.height >= pad1.y and ball.y <= pad1.y + pad1.height then
             -- FIRST PAD IS TOUCHED
             love.audio.play(snd_hit)
@@ -86,7 +87,7 @@ function love.update(dt)
     end
 
     -- BOUNCE THE BALL AGAINST THE RIGHT SIDE OF THE SCREEN
-    if ball.speed_x == default_speed then
+    if ball.speed_x == ball_speed then
         if ball.x + ball.width >= pad2.x and ball.y + ball.height >= pad2.y and ball.y <= pad2.y + pad2.height then
             -- SECOND PAD IS TOUCHED
             love.audio.play(snd_hit)
@@ -101,7 +102,7 @@ function love.update(dt)
     end
 
     -- BOUNCE THE BALL AGAINST THE TOP SIDE OF THE SCREEN
-    if ball.speed_y ~= default_speed then
+    if ball.speed_y ~= ball_speed then
         if ball.y <= screen_padding then
             -- TOP WALL IS TOUCHED
             invert_ball_speed_y()
@@ -109,7 +110,7 @@ function love.update(dt)
     end
 
     -- BOUNCE THE BALL AGAINST THE BOTTOM SIDE OF THE SCREEN
-    if ball.speed_y == default_speed then
+    if ball.speed_y == ball_speed then
         if ball.y + ball.height >= love.graphics.getHeight() - screen_padding then
             -- TOP WALL IS TOUCHED
             invert_ball_speed_y()
