@@ -18,12 +18,15 @@ ball.height = 20
 ball.speed_x = default_speed
 ball.speed_y = default_speed
 
-function love.load()
-    -- Set in load() because getWidth() and getHeight() are initialized here
-    pad2.x = love.graphics.getWidth() - screen_padding - pad2.width
-
+function center_ball()
     ball.x = love.graphics.getWidth() / 2 - ball.width / 2
     ball.y = love.graphics.getHeight() / 2 - ball.height / 2
+end
+
+function love.load()
+    -- pad2.x, ball.x and ball.y are set in load() because getWidth() and getHeight() are initialized here
+    pad2.x = love.graphics.getWidth() - screen_padding - pad2.width
+    center_ball()
 end
 
 function love.update(dt)
@@ -91,7 +94,7 @@ function love.update(dt)
         end
     end
 
-    -- Move
+    -- MOVE THE BALL
     ball.x = ball.x + ball.speed_x
     ball.y = ball.y + ball.speed_y
 end
