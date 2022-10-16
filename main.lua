@@ -45,8 +45,8 @@ function love.load()
     center_pads()
     center_ball()
 
-    snd_hit = love.audio.newSource("snd_hit.wav", "static")
-    snd_lose = love.audio.newSource("snd_lose.wav", "static")
+    snd_hit = love.audio.newSource("snd_hit.mp3", "static")
+    snd_lose = love.audio.newSource("snd_lose.mp3", "static")
 end
 
 function love.update(dt)
