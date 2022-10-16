@@ -24,6 +24,8 @@ ball.height = 20
 ball.speed_x = default_speed
 ball.speed_y = default_speed
 
+arr_ball_trail = {}
+
 function center_pads()
     pad1.y = love.graphics.getHeight() / 2 - pad1.height / 2
     pad2.y = love.graphics.getHeight() / 2 - pad2.height / 2
@@ -121,6 +123,23 @@ function love.update(dt)
     -- MOVE THE BALL
     ball.x = ball.x + ball.speed_x
     ball.y = ball.y + ball.speed_y
+
+    -- ADD A TRAIL EFFECT TO THE BALL
+    -- Compute the trail
+    for n = #arr_ball_trail, 1, -1 do
+        local trail = arr_ball_trail[n]
+        trail.life = trail.life - dt
+        if trail.life <= 0 then
+            table.remove(arr_ball_trail, n)
+        end
+    end
+
+    -- Add the trail where the ball is and keep it alive for 1 second
+    local ball_trail = {}
+    ball_trail.x = ball.x
+    ball_trail.y = ball.y
+    ball_trail.life = 0.5
+    table.insert(arr_ball_trail, ball_trail)
 end
 
 function love.draw()
@@ -137,5 +156,16 @@ function love.draw()
     love.graphics.rectangle("fill", pad1.x, pad1.y, pad1.width, pad1.height)
     love.graphics.rectangle("fill", pad2.x, pad2.y, pad2.width, pad2.height)
     love.graphics.rectangle("fill", ball.x, ball.y, ball.width, ball.height)
+    -- Ball trail
+    for n = 1, #arr_ball_trail do
+        local trail = arr_ball_trail[n]
+        local alpha = trail.life / 2
+        -- Color for the trail
+        love.graphics.setColor(1, 1, 1, alpha)
+        love.graphics.rectangle("fill", trail.x, trail.y, ball.width, ball.height)
+    end
+
+    -- Color for everything
+    love.graphics.setColor(1, 1, 1, 1)
 end
 
