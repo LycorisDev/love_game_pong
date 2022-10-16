@@ -69,6 +69,9 @@ function love.load()
     snd_hit = love.audio.newSource("snd_hit.mp3", "static")
     snd_lose = love.audio.newSource("snd_lose.mp3", "static")
 
+    -- Initialize window
+    love.window.setTitle('PONG')
+
     -- Initialize data
     pad2.x = love.graphics.getWidth() - screen_padding - pad2.width
     start_game(1)
