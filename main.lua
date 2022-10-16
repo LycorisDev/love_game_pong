@@ -20,7 +20,7 @@ ball.speed_y = default_speed
 
 function love.load()
     -- Set in load() because getWidth() and getHeight() are initialized here
-    pad2.x = love.graphics.getWidth() - pad2.width - screen_padding
+    pad2.x = love.graphics.getWidth() - screen_padding - pad2.width
 
     ball.x = love.graphics.getWidth() / 2 - ball.width / 2
     ball.y = love.graphics.getHeight() / 2 - ball.height / 2
@@ -32,7 +32,7 @@ function love.update(dt)
     if love.keyboard.isDown("e") and pad1.y > screen_padding then
         pad1.y = pad1.y - default_speed
     end
-    if love.keyboard.isDown("c") and pad1.y < love.graphics.getHeight() - pad1.height - screen_padding then
+    if love.keyboard.isDown("c") and pad1.y < love.graphics.getHeight() - screen_padding - pad1.height then
         pad1.y = pad1.y + default_speed
     end
 
@@ -41,26 +41,54 @@ function love.update(dt)
     if love.keyboard.isDown("up") and pad2.y > screen_padding then
         pad2.y = pad2.y - default_speed
     end
-    if love.keyboard.isDown("down") and pad2.y < love.graphics.getHeight() - pad2.height - screen_padding then
+    if love.keyboard.isDown("down") and pad2.y < love.graphics.getHeight() - screen_padding - pad2.height then
         pad2.y = pad2.y + default_speed
     end
 
-    -- BOUNCE THE BALL AGAINST THE WALLS
-    -- Invert the x speed if the left wall is touched
-    if ball.speed_x ~= default_speed and ball.x <= screen_padding then
-        ball.speed_x = -ball.speed_x
+    -- BOUNCE THE BALL AGAINST THE LEFT SIDE OF THE SCREEN
+    if ball.speed_x ~= default_speed then
+        if ball.x <= pad1.x + pad1.width and ball.y + ball.height >= pad1.y and ball.y <= pad1.y + pad1.height then
+            -- FIRST PAD IS TOUCHED
+            -- Invert the x speed
+            ball.speed_x = -ball.speed_x
+        end
+        if ball.x <= screen_padding then
+            -- LEFT WALL IS TOUCHED
+            -- Invert the x speed
+            ball.speed_x = -ball.speed_x
+        end
     end
-    -- Invert the x speed if the right wall is touched
-    if ball.speed_x == default_speed and ball.x >= love.graphics.getWidth() - ball.width - screen_padding then
-        ball.speed_x = -ball.speed_x
+
+    -- BOUNCE THE BALL AGAINST THE RIGHT SIDE OF THE SCREEN
+    if ball.speed_x == default_speed then
+        if ball.x + ball.width >= pad2.x and ball.y + ball.height >= pad2.y and ball.y <= pad2.y + pad2.height then
+            -- SECOND PAD IS TOUCHED
+            -- Invert the x speed
+            ball.speed_x = -ball.speed_x
+        end
+        if ball.x + ball.width >= love.graphics.getWidth() - screen_padding then
+            -- RIGHT WALL IS TOUCHED
+            -- Invert the x speed
+            ball.speed_x = -ball.speed_x
+        end
     end
-    -- Invert the y speed if the top wall is touched
-    if ball.speed_y ~= default_speed and ball.y <= screen_padding then
-        ball.speed_y = -ball.speed_y
+
+    -- BOUNCE THE BALL AGAINST THE TOP SIDE OF THE SCREEN
+    if ball.speed_y ~= default_speed then
+        if ball.y <= screen_padding then
+            -- TOP WALL IS TOUCHED
+            -- Invert the y speed
+            ball.speed_y = -ball.speed_y
+        end
     end
-    -- Invert the y speed if the bottom wall is touched
-    if ball.speed_y == default_speed and ball.y >= love.graphics.getHeight() - ball.height - screen_padding then
-        ball.speed_y = -ball.speed_y
+
+    -- BOUNCE THE BALL AGAINST THE BOTTOM SIDE OF THE SCREEN
+    if ball.speed_y == default_speed then
+        if ball.y + ball.height >= love.graphics.getHeight() - screen_padding then
+            -- TOP WALL IS TOUCHED
+            -- Invert the y speed
+            ball.speed_y = -ball.speed_y
+        end
     end
 
     -- Move
