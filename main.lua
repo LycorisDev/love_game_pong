@@ -26,6 +26,25 @@ ball.speed_y = default_speed
 
 arr_ball_trail = {}
 
+function start_game(nbr_player)
+    score1 = 0
+    score2 = 0
+
+    center_pads()
+    center_ball()
+
+    -- Ball goes towards player 2
+    if nbr_player == 1 then
+        ball.speed_x = default_speed
+        ball.speed_y = default_speed
+    end
+    -- Ball goes towards player 1
+    if nbr_player == 2 then
+        ball.speed_x = -default_speed
+        ball.speed_y = -default_speed
+    end
+end
+
 function center_pads()
     pad1.y = love.graphics.getHeight() / 2 - pad1.height / 2
     pad2.y = love.graphics.getHeight() / 2 - pad2.height / 2
@@ -45,17 +64,26 @@ function invert_ball_speed_y()
 end
 
 function love.load()
-    -- Set in load() and not globally because getWidth() and getHeight() are initialized here
-    pad2.x = love.graphics.getWidth() - screen_padding - pad2.width
-    center_pads()
-    center_ball()
-
+    -- Load resources in
     love.graphics.setFont(love.graphics.newFont("PixelMaster.ttf", 60))
     snd_hit = love.audio.newSource("snd_hit.mp3", "static")
     snd_lose = love.audio.newSource("snd_lose.mp3", "static")
+
+    -- Initialize data
+    pad2.x = love.graphics.getWidth() - screen_padding - pad2.width
+    start_game(1)
 end
 
 function love.update(dt)
+    -- START AGAIN WITH "ESCAPE" (supposedly pressed by player 1)
+    if love.keyboard.isDown("escape") then
+        start_game(1)
+    end
+    -- START AGAIN WITH "ENTER" (supposedly pressed player 2)
+    if love.keyboard.isDown("return") then
+        start_game(2)
+    end
+
     -- PAD 1 CONTROLS
     -- "E" for up and "C" for down, because they are at the same place on both QWERTY and AZERTY keyboards
     if love.keyboard.isDown("e") and pad1.y > screen_padding then
