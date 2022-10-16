@@ -44,6 +44,9 @@ function love.load()
     pad2.x = love.graphics.getWidth() - screen_padding - pad2.width
     center_pads()
     center_ball()
+
+    snd_hit = love.audio.newSource("snd_hit.wav", "static")
+    snd_lose = love.audio.newSource("snd_lose.wav", "static")
 end
 
 function love.update(dt)
@@ -69,13 +72,13 @@ function love.update(dt)
     if ball.speed_x ~= default_speed then
         if ball.x <= pad1.x + pad1.width and ball.y + ball.height >= pad1.y and ball.y <= pad1.y + pad1.height then
             -- FIRST PAD IS TOUCHED
-            -- Invert the x speed
-            ball.speed_x = -ball.speed_x
+            love.audio.play(snd_hit)
+            invert_ball_speed_x()
         end
         if ball.x <= screen_padding then
             -- LEFT WALL IS TOUCHED
-            -- Invert the x speed
-            ball.speed_x = -ball.speed_x
+            love.audio.play(snd_lose)
+            invert_ball_speed_x()
         end
     end
 
@@ -83,10 +86,12 @@ function love.update(dt)
     if ball.speed_x == default_speed then
         if ball.x + ball.width >= pad2.x and ball.y + ball.height >= pad2.y and ball.y <= pad2.y + pad2.height then
             -- SECOND PAD IS TOUCHED
+            love.audio.play(snd_hit)
             invert_ball_speed_x()
         end
         if ball.x + ball.width >= love.graphics.getWidth() - screen_padding then
             -- RIGHT WALL IS TOUCHED
+            love.audio.play(snd_lose)
             invert_ball_speed_x()
         end
     end
