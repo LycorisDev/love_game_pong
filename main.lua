@@ -121,6 +121,7 @@ function love.draw()
     -- Padding
     love.graphics.rectangle("line", screen_padding, screen_padding, love.graphics.getWidth() - screen_padding * 2, love.graphics.getHeight() - screen_padding * 2)
     -- Middle line
+    love.graphics.setLineWidth(4)
     love.graphics.line(love.graphics.getWidth() / 2, screen_padding + 1, love.graphics.getWidth() / 2, love.graphics.getHeight() - screen_padding - 1)
     -- Elements
     love.graphics.rectangle("fill", pad1.x, pad1.y, pad1.width, pad1.height)
