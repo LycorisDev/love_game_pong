@@ -156,21 +156,22 @@ function love.update(dt)
     ball.y = ball.y + ball.speed_y
 
     -- ADD A TRAIL EFFECT TO THE BALL
-    -- Compute the trail
-    for n = #arr_ball_trail, 1, -1 do
-        local trail = arr_ball_trail[n]
-        trail.life = trail.life - dt
-        if trail.life <= 0 then
-            table.remove(arr_ball_trail, n)
-        end
-    end
-
-    -- Add the trail where the ball is and keep it alive for 1 second
+    -- Add a ball "ghost" to the trail array
     local ball_trail = {}
     ball_trail.x = ball.x
     ball_trail.y = ball.y
     ball_trail.life = 0.5
     table.insert(arr_ball_trail, ball_trail)
+
+    for n = #arr_ball_trail, 1, -1 do
+        local trail = arr_ball_trail[n]
+        -- Decrease the element's "life"
+        trail.life = trail.life - dt
+        -- If life has reached 0, remove the element
+        if trail.life < 0 then
+            table.remove(arr_ball_trail, n)
+        end
+    end
 end
 
 function love.draw()
@@ -189,11 +190,12 @@ function love.draw()
     love.graphics.rectangle("fill", ball.x, ball.y, ball.width, ball.height)
     -- Ball trail
     for n = 1, #arr_ball_trail do
-        local trail = arr_ball_trail[n]
-        local alpha = trail.life / 2
+        local ghost = arr_ball_trail[n]
+        -- Set the opacity: <= 0.5, then divided by 2 because it's too intense
+        local alpha = ghost.life / 2
         -- Color for the trail
         love.graphics.setColor(1, 1, 1, alpha)
-        love.graphics.rectangle("fill", trail.x, trail.y, ball.width, ball.height)
+        love.graphics.rectangle("fill", ghost.x, ghost.y, ball.width, ball.height)
     end
 
     -- Color for everything
