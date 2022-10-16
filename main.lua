@@ -31,8 +31,16 @@ function center_ball()
     ball.y = love.graphics.getHeight() / 2 - ball.height / 2
 end
 
+function invert_ball_speed_x()
+    ball.speed_x = -ball.speed_x
+end
+
+function invert_ball_speed_y()
+    ball.speed_y = -ball.speed_y
+end
+
 function love.load()
-    -- Set in load() because getWidth() and getHeight() are initialized here
+    -- Set in load() and not globally because getWidth() and getHeight() are initialized here
     pad2.x = love.graphics.getWidth() - screen_padding - pad2.width
     center_pads()
     center_ball()
@@ -75,13 +83,11 @@ function love.update(dt)
     if ball.speed_x == default_speed then
         if ball.x + ball.width >= pad2.x and ball.y + ball.height >= pad2.y and ball.y <= pad2.y + pad2.height then
             -- SECOND PAD IS TOUCHED
-            -- Invert the x speed
-            ball.speed_x = -ball.speed_x
+            invert_ball_speed_x()
         end
         if ball.x + ball.width >= love.graphics.getWidth() - screen_padding then
             -- RIGHT WALL IS TOUCHED
-            -- Invert the x speed
-            ball.speed_x = -ball.speed_x
+            invert_ball_speed_x()
         end
     end
 
@@ -89,8 +95,7 @@ function love.update(dt)
     if ball.speed_y ~= default_speed then
         if ball.y <= screen_padding then
             -- TOP WALL IS TOUCHED
-            -- Invert the y speed
-            ball.speed_y = -ball.speed_y
+            invert_ball_speed_y()
         end
     end
 
@@ -98,8 +103,7 @@ function love.update(dt)
     if ball.speed_y == default_speed then
         if ball.y + ball.height >= love.graphics.getHeight() - screen_padding then
             -- TOP WALL IS TOUCHED
-            -- Invert the y speed
-            ball.speed_y = -ball.speed_y
+            invert_ball_speed_y()
         end
     end
 
@@ -109,7 +113,11 @@ function love.update(dt)
 end
 
 function love.draw()
+    -- Padding
     love.graphics.rectangle("line", screen_padding, screen_padding, love.graphics.getWidth() - screen_padding * 2, love.graphics.getHeight() - screen_padding * 2)
+    -- Middle line
+    love.graphics.line(love.graphics.getWidth() / 2, screen_padding + 1, love.graphics.getWidth() / 2, love.graphics.getHeight() - screen_padding - 1)
+    -- Elements
     love.graphics.rectangle("fill", pad1.x, pad1.y, pad1.width, pad1.height)
     love.graphics.rectangle("fill", pad2.x, pad2.y, pad2.width, pad2.height)
     love.graphics.rectangle("fill", ball.x, ball.y, ball.width, ball.height)
