@@ -1,6 +1,9 @@
 screen_padding = 10
 default_speed = 2
 
+score1 = 0
+score2 = 0
+
 pad1 = {}
 pad1.x = screen_padding
 -- pad1.y
@@ -45,6 +48,7 @@ function love.load()
     center_pads()
     center_ball()
 
+    love.graphics.setFont(love.graphics.newFont("PixelMaster.ttf", 60))
     snd_hit = love.audio.newSource("snd_hit.mp3", "static")
     snd_lose = love.audio.newSource("snd_lose.mp3", "static")
 end
@@ -78,6 +82,7 @@ function love.update(dt)
         if ball.x <= screen_padding then
             -- LEFT WALL IS TOUCHED
             love.audio.play(snd_lose)
+            score2 = score2 + 1
             invert_ball_speed_x()
         end
     end
@@ -92,6 +97,7 @@ function love.update(dt)
         if ball.x + ball.width >= love.graphics.getWidth() - screen_padding then
             -- RIGHT WALL IS TOUCHED
             love.audio.play(snd_lose)
+            score1 = score1 + 1
             invert_ball_speed_x()
         end
     end
@@ -123,6 +129,10 @@ function love.draw()
     -- Middle line
     love.graphics.setLineWidth(4)
     love.graphics.line(love.graphics.getWidth() / 2, screen_padding + 1, love.graphics.getWidth() / 2, love.graphics.getHeight() - screen_padding - 1)
+    -- Score
+    local font = love.graphics.getFont()
+    local score = score1.."   "..score2
+    love.graphics.print(score, love.graphics.getWidth() / 2 - font:getWidth(score) / 2, 5)
     -- Elements
     love.graphics.rectangle("fill", pad1.x, pad1.y, pad1.width, pad1.height)
     love.graphics.rectangle("fill", pad2.x, pad2.y, pad2.width, pad2.height)
