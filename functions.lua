@@ -35,3 +35,24 @@ function invert_ball_speed_y()
     ball.speed_y = -ball.speed_y
 end
 
+function draw_dashed_line(x1, y1, x2, y2, dash_length, space_length)
+    -- Vertical line
+    if x1 == x2 then
+        for n = y1, y2, dash_length + space_length do
+            love.graphics.line(x1, n, x2, n + dash_length)
+        end
+    end
+
+    -- Horizontal line
+    if y1 == y2 then
+        for n = x1, x2, dash_length + space_length do
+            love.graphics.line(n, y1, n + dash_length, y2)
+        end
+    end
+end
+
+function get_rgb_on_1(red, green, blue, alpha)
+    a = alpha or 1
+    return { red / 255, green / 255, blue / 255, a }
+end
+

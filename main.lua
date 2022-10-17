@@ -44,11 +44,11 @@ function love.load()
 end
 
 function love.update(dt)
-    -- START AGAIN WITH "ESCAPE" (supposedly pressed by player 1)
+    -- RESTART WITH "ESCAPE" (supposedly pressed by player 1)
     if love.keyboard.isDown("escape") then
         start_game(1)
     end
-    -- START AGAIN WITH "ENTER" (supposedly pressed player 2)
+    -- RESTART WITH "ENTER" (supposedly pressed player 2)
     if love.keyboard.isDown("return") then
         start_game(2)
     end
@@ -141,30 +141,46 @@ function love.update(dt)
 end
 
 function love.draw()
+    -- Default color
+    love.graphics.setColor(get_rgb_on_1(58, 105, 165)) -- #3A69A5
+
+    -- Middle line
+    love.graphics.setLineWidth(2)
+    draw_dashed_line(love.graphics.getWidth() / 2, screen_padding + 1, love.graphics.getWidth() / 2, love.graphics.getHeight() - screen_padding - 1, 4, 8)
+
+    -- Thick lines
+    love.graphics.setLineWidth(4)
+
     -- Padding
     love.graphics.rectangle("line", screen_padding, screen_padding, love.graphics.getWidth() - screen_padding * 2, love.graphics.getHeight() - screen_padding * 2)
-    -- Middle line
-    love.graphics.setLineWidth(4)
-    love.graphics.line(love.graphics.getWidth() / 2, screen_padding + 1, love.graphics.getWidth() / 2, love.graphics.getHeight() - screen_padding - 1)
+
+    -- Corners
+    love.graphics.rectangle("line", 1, 1, screen_padding - 1, screen_padding - 1)
+    love.graphics.rectangle("line", love.graphics.getWidth() - screen_padding, 1, screen_padding - 1, screen_padding - 1)
+    love.graphics.rectangle("line", love.graphics.getWidth() - screen_padding, love.graphics.getHeight() - screen_padding, screen_padding - 1, screen_padding - 1)
+    love.graphics.rectangle("line", 1, love.graphics.getHeight() - screen_padding, screen_padding - 1, screen_padding - 1)
+
     -- Score
     local font = love.graphics.getFont()
     local score = score1.."   "..score2
+    love.graphics.setColor(get_rgb_on_1(205, 226, 252)) -- #CDE2FC
     love.graphics.print(score, love.graphics.getWidth() / 2 - font:getWidth(score) / 2, 5)
-    -- Elements
+
+    -- Ball
+    love.graphics.rectangle("fill", ball.x, ball.y, ball.width, ball.height)
+
+    -- Pads
+    love.graphics.setColor(get_rgb_on_1(117, 175, 165)) -- #75AFA5
     love.graphics.rectangle("fill", pad1.x, pad1.y, pad1.width, pad1.height)
     love.graphics.rectangle("fill", pad2.x, pad2.y, pad2.width, pad2.height)
-    love.graphics.rectangle("fill", ball.x, ball.y, ball.width, ball.height)
+
     -- Ball trail
     for n = 1, #arr_ball_trail do
         local ghost = arr_ball_trail[n]
         -- Set the opacity: <= 0.5, then divided by 2 because it's too intense
         local alpha = ghost.life / 2
-        -- Color for the trail
-        love.graphics.setColor(1, 1, 1, alpha)
+        love.graphics.setColor(get_rgb_on_1(205, 226, 252, alpha)) -- #CDE2FC + alpha
         love.graphics.rectangle("fill", ghost.x, ghost.y, ball.width, ball.height)
     end
-
-    -- Color for everything
-    love.graphics.setColor(1, 1, 1, 1)
 end
 
