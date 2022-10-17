@@ -1,186 +1,28 @@
-require("functions")
-
-screen_padding = 10
-pad_speed = 5
-ball_speed = 3
-
-score1 = 0
-score2 = 0
-
-pad1 = {}
-pad1.x = screen_padding
--- pad1.y
-pad1.width = 20
-pad1.height = 80
-
-pad2 = {}
--- pad2.x
--- pad2.y
-pad2.width = 20
-pad2.height = 80
-
-ball = {}
--- ball.x
--- ball.y
-ball.width = 20
-ball.height = 20
-ball.speed_x = ball_speed
-ball.speed_y = ball_speed
-
-arr_ball_trail = {}
+require("functions/init")
+require("functions/controls")
+require("functions/move_ball")
+require("functions/graphics")
 
 function love.load()
-    -- Load resources in
-    love.graphics.setFont(love.graphics.newFont("PixelMaster.ttf", 60))
-    snd_hit = love.audio.newSource("snd_hit.mp3", "static")
-    snd_lose = love.audio.newSource("snd_lose.mp3", "static")
-
-    -- Initialize window
-    love.window.setTitle('PONG')
-
-    -- Initialize data
-    pad2.x = love.graphics.getWidth() - screen_padding - pad2.width
-    start_game(1)
+    initialize_window()
+    load_resources_in()
+    initialize_data()
 end
 
 function love.update(dt)
-    -- RESTART WITH "ESCAPE" (supposedly pressed by player 1)
-    if love.keyboard.isDown("escape") then
-        start_game(1)
-    end
-    -- RESTART WITH "ENTER" (supposedly pressed player 2)
-    if love.keyboard.isDown("return") then
-        start_game(2)
-    end
-
-    -- PAD 1 CONTROLS
-    -- "E" for up and "C" for down, because they are at the same place on both QWERTY and AZERTY keyboards
-    if love.keyboard.isDown("e") and pad1.y > screen_padding then
-        pad1.y = pad1.y - pad_speed
-    end
-    if love.keyboard.isDown("c") and pad1.y < love.graphics.getHeight() - screen_padding - pad1.height then
-        pad1.y = pad1.y + pad_speed
-    end
-
-    -- PAD 2 CONTROLS
-    -- "Up arrow" and "Down arrow"
-    if love.keyboard.isDown("up") and pad2.y > screen_padding then
-        pad2.y = pad2.y - pad_speed
-    end
-    if love.keyboard.isDown("down") and pad2.y < love.graphics.getHeight() - screen_padding - pad2.height then
-        pad2.y = pad2.y + pad_speed
-    end
-
-    -- BOUNCE THE BALL AGAINST THE LEFT SIDE OF THE SCREEN
-    if ball.speed_x ~= ball_speed then
-        if ball.x <= pad1.x + pad1.width and ball.y + ball.height >= pad1.y and ball.y <= pad1.y + pad1.height then
-            -- FIRST PAD IS TOUCHED
-            love.audio.play(snd_hit)
-            invert_ball_speed_x()
-        end
-        if ball.x <= screen_padding then
-            -- LEFT WALL IS TOUCHED
-            love.audio.play(snd_lose)
-            score2 = score2 + 1
-            invert_ball_speed_x()
-        end
-    end
-
-    -- BOUNCE THE BALL AGAINST THE RIGHT SIDE OF THE SCREEN
-    if ball.speed_x == ball_speed then
-        if ball.x + ball.width >= pad2.x and ball.y + ball.height >= pad2.y and ball.y <= pad2.y + pad2.height then
-            -- SECOND PAD IS TOUCHED
-            love.audio.play(snd_hit)
-            invert_ball_speed_x()
-        end
-        if ball.x + ball.width >= love.graphics.getWidth() - screen_padding then
-            -- RIGHT WALL IS TOUCHED
-            love.audio.play(snd_lose)
-            score1 = score1 + 1
-            invert_ball_speed_x()
-        end
-    end
-
-    -- BOUNCE THE BALL AGAINST THE TOP SIDE OF THE SCREEN
-    if ball.speed_y ~= ball_speed then
-        if ball.y <= screen_padding then
-            -- TOP WALL IS TOUCHED
-            invert_ball_speed_y()
-        end
-    end
-
-    -- BOUNCE THE BALL AGAINST THE BOTTOM SIDE OF THE SCREEN
-    if ball.speed_y == ball_speed then
-        if ball.y + ball.height >= love.graphics.getHeight() - screen_padding then
-            -- TOP WALL IS TOUCHED
-            invert_ball_speed_y()
-        end
-    end
-
-    -- MOVE THE BALL
-    ball.x = ball.x + ball.speed_x
-    ball.y = ball.y + ball.speed_y
-
-    -- ADD A TRAIL EFFECT TO THE BALL
-    -- Add a ball "ghost" to the trail array
-    local ball_trail = {}
-    ball_trail.x = ball.x
-    ball_trail.y = ball.y
-    ball_trail.life = 0.5
-    table.insert(arr_ball_trail, ball_trail)
-
-    for n = #arr_ball_trail, 1, -1 do
-        local trail = arr_ball_trail[n]
-        -- Decrease the element's "life"
-        trail.life = trail.life - dt
-        -- If life has reached 0, remove the element
-        if trail.life < 0 then
-            table.remove(arr_ball_trail, n)
-        end
-    end
+    ctrl_restart()
+    ctrl_player1()
+    ctrl_player2()
+    move_ball(dt)
 end
 
 function love.draw()
-    -- Default color
-    love.graphics.setColor(get_rgb_on_1(58, 105, 165)) -- #3A69A5
-
-    -- Middle line
-    love.graphics.setLineWidth(2)
-    draw_dashed_line(love.graphics.getWidth() / 2, screen_padding + 1, love.graphics.getWidth() / 2, love.graphics.getHeight() - screen_padding - 1, 4, 8)
-
-    -- Thick lines
-    love.graphics.setLineWidth(4)
-
-    -- Padding
-    love.graphics.rectangle("line", screen_padding, screen_padding, love.graphics.getWidth() - screen_padding * 2, love.graphics.getHeight() - screen_padding * 2)
-
-    -- Corners
-    love.graphics.rectangle("line", 1, 1, screen_padding - 1, screen_padding - 1)
-    love.graphics.rectangle("line", love.graphics.getWidth() - screen_padding, 1, screen_padding - 1, screen_padding - 1)
-    love.graphics.rectangle("line", love.graphics.getWidth() - screen_padding, love.graphics.getHeight() - screen_padding, screen_padding - 1, screen_padding - 1)
-    love.graphics.rectangle("line", 1, love.graphics.getHeight() - screen_padding, screen_padding - 1, screen_padding - 1)
-
-    -- Score
-    local font = love.graphics.getFont()
-    local score = score1.."   "..score2
-    love.graphics.setColor(get_rgb_on_1(205, 226, 252)) -- #CDE2FC
-    love.graphics.print(score, love.graphics.getWidth() / 2 - font:getWidth(score) / 2, 5)
-
-    -- Ball
-    love.graphics.rectangle("fill", ball.x, ball.y, ball.width, ball.height)
-
-    -- Pads
-    love.graphics.setColor(get_rgb_on_1(117, 175, 165)) -- #75AFA5
-    love.graphics.rectangle("fill", pad1.x, pad1.y, pad1.width, pad1.height)
-    love.graphics.rectangle("fill", pad2.x, pad2.y, pad2.width, pad2.height)
-
-    -- Ball trail
-    for n = 1, #arr_ball_trail do
-        local ghost = arr_ball_trail[n]
-        -- Set the opacity: <= 0.5, then divided by 2 because it's too intense
-        local alpha = ghost.life / 2
-        love.graphics.setColor(get_rgb_on_1(205, 226, 252, alpha)) -- #CDE2FC + alpha
-        love.graphics.rectangle("fill", ghost.x, ghost.y, ball.width, ball.height)
-    end
+    draw_screen_padding()
+    draw_middle_line()
+    draw_corners()
+    draw_score()
+    draw_pads()
+    draw_ball()
+    draw_ball_trail()
 end
 
