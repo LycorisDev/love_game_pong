@@ -118,7 +118,6 @@ function draw_corners()
 end
 
 function draw_score()
-    love.graphics.setLineWidth(4)
     love.graphics.setColor(get_love_color("CDE2FC"))
 
     local font = love.graphics.getFont()
@@ -150,6 +149,26 @@ function draw_ball_trail()
         local alpha = ghost.life / 2
         love.graphics.setColor(get_love_color("CDE2FC", alpha))
         love.graphics.rectangle("fill", ghost.x, ghost.y, ball.width, ball.height)
+    end
+end
+
+function draw_commands()
+    love.graphics.setColor(get_love_color("CDE2FC"))
+
+    local font = love.graphics.getFont()
+    local str = {}
+    table.insert(str, "- - PAUSED - -")
+    table.insert(str, "Press SPACE to pause")
+    table.insert(str, "\n")
+    table.insert(str, "Player 1: E for up and C for down.")
+    table.insert(str, "Player 2: UP ARROW and DOWN ARROW.")
+    table.insert(str, "\n")
+    table.insert(str, "Press ESCAPE or ENTER to restart,")
+    table.insert(str, "this will not pause the game.")
+    local height = 7
+    for i = 1, #str do
+        love.graphics.print(str[i], love.graphics.getWidth() / 2 - font:getWidth(str[i]) / 2, height)
+        height = height + font:getHeight(str[i]) + 7
     end
 end
 

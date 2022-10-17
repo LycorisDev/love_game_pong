@@ -10,6 +10,12 @@ function love.load()
 end
 
 function love.update(dt)
+    ctrl_pause()
+
+    if pause_game then
+        return
+    end
+
     ctrl_restart()
     ctrl_player1()
     ctrl_player2()
@@ -18,8 +24,14 @@ end
 
 function love.draw()
     draw_screen_padding()
-    draw_middle_line()
     draw_corners()
+
+    if pause_game then
+        draw_commands()
+        return
+    end
+
+    draw_middle_line()
     draw_score()
     draw_pads()
     draw_ball()

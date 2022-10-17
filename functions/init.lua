@@ -1,3 +1,5 @@
+pause_game = true
+
 screen_padding = 10
 pad_speed = 5
 ball_speed = 3
@@ -21,6 +23,8 @@ function load_resources_in()
 end
 
 function initialize_data()
+    pause_game = true
+
     pad1.width = 20
     pad1.height = 80
     pad1.x = screen_padding

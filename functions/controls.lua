@@ -9,6 +9,13 @@ function ctrl_restart()
     end
 end
 
+function ctrl_pause()
+    -- Pause with "Space" which is easily accessible by both players
+    if love.keyboard.isDown("space") then
+        pause_game = not pause_game
+    end
+end
+
 function ctrl_player1()
     -- "E" for up and "C" for down, because they are at the same place on both QWERTY and AZERTY keyboards
     if love.keyboard.isDown("e") and pad1.y > screen_padding then
