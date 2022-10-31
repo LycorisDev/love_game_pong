@@ -2,6 +2,8 @@
 
 This game is made with LÖVE (also known as Love2D), which is a Lua framework.
 
+![](./ingame_screenshot.png)
+
 To launch it from the clone, [install LÖVE](https://love2d.org/#download) and then type ``love directory_name``.
 
 Or you can download it already compiled:
