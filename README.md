@@ -1,6 +1,8 @@
 # Pong game
 
-This game is made with LÖVE (also known as Love2D), which is a Lua framework.
+**Project type:** PC video game.  
+**Brief description:** Pong has been made with LÖVE (also known as Love2D), a Lua framework. This is a cross-platform PC game (Windows, Mac and Linux) for two local players.  
+**Technologies:** LÖVE (Lua).  
 
 ![](./ingame_screenshot.png)
 
