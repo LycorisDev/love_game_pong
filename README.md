@@ -1,9 +1,9 @@
-# Pong game
-
-**Project type:** PC video game.  
-**Brief description:** Pong has been made with LÖVE (also known as Love2D), a Lua framework. This is a cross-platform PC game (Windows, Mac and Linux) for two local players.  
-**Technologies:** LÖVE (Lua).  
+# Pong (LÖVE)
 
 ![](./ingame_screenshot.png)
 
-To launch it from the clone, [install LÖVE](https://love2d.org/#download) and then type ``love directory_name``.
+This *Pong* game is for two local players, on the same keyboard. It has been 
+made with LÖVE, also known as Love2D, which is a simple Lua framework to make 
+2D games pixel by pixel.  
+
+This game is released with LÖVE version 11.5.  
