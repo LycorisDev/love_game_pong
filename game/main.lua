@@ -14,8 +14,8 @@ function love.update(dt)
 		return
 	end
 
-	ctrl_player1()
-	ctrl_player2()
+	ctrl_player1(dt)
+	ctrl_player2(dt)
 	move_ball(dt)
 end
 

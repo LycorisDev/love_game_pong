@@ -1,8 +1,8 @@
 pause_game = true
 
 screen_padding = 10
-pad_speed = 5
-ball_speed = 3
+pad_speed = 400
+ball_speed = 4
 
 score1 = 0
 score2 = 0
