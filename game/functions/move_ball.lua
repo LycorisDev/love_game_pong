@@ -12,10 +12,12 @@ function move_ball(dt)
 		if ball.x <= pad1.x + pad1.width and ball.y + ball.height >= pad1.y and
 		ball.y <= pad1.y + pad1.height then
 			-- FIRST PAD IS TOUCHED
+			love.audio.stop(snd_hit)
 			love.audio.play(snd_hit)
 			invert_ball_speed_x()
 		elseif ball.x <= screen_padding then
 			-- LEFT WALL IS TOUCHED
+			love.audio.stop(snd_lose)
 			love.audio.play(snd_lose)
 			score2 = score2 + 1
 			invert_ball_speed_x()
@@ -27,11 +29,13 @@ function move_ball(dt)
 		if ball.x + ball.width >= pad2.x and ball.y + ball.height >= pad2.y and
 		ball.y <= pad2.y + pad2.height then
 			-- SECOND PAD IS TOUCHED
+			love.audio.stop(snd_hit)
 			love.audio.play(snd_hit)
 			invert_ball_speed_x()
 		elseif ball.x + ball.width >= love.graphics.getWidth() - screen_padding
 		then
 			-- RIGHT WALL IS TOUCHED
+			love.audio.stop(snd_lose)
 			love.audio.play(snd_lose)
 			score1 = score1 + 1
 			invert_ball_speed_x()
