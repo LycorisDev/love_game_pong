@@ -7,8 +7,12 @@ function invert_ball_speed_y()
 end
 
 function move_ball(dt)
+	-- MOVE THE BALL
+	ball.x = ball.x + ball.speed_x * dt
+	ball.y = ball.y + ball.speed_y * dt
+
 	-- BOUNCE THE BALL AGAINST THE LEFT SIDE OF THE SCREEN
-	if ball.speed_x ~= ball_speed then
+	if ball.speed_x < 0 then
 		if ball.x <= pad1.x + pad1.width and ball.y + ball.height >= pad1.y and
 		ball.y <= pad1.y + pad1.height then
 			-- FIRST PAD IS TOUCHED
@@ -25,7 +29,7 @@ function move_ball(dt)
 	end
 
 	-- BOUNCE THE BALL AGAINST THE RIGHT SIDE OF THE SCREEN
-	if ball.speed_x == ball_speed then
+	if ball.speed_x > 0 then
 		if ball.x + ball.width >= pad2.x and ball.y + ball.height >= pad2.y and
 		ball.y <= pad2.y + pad2.height then
 			-- SECOND PAD IS TOUCHED
@@ -43,7 +47,7 @@ function move_ball(dt)
 	end
 
 	-- BOUNCE THE BALL AGAINST THE TOP SIDE OF THE SCREEN
-	if ball.speed_y ~= ball_speed then
+	if ball.speed_y < 0 then
 		if ball.y <= screen_padding then
 			-- TOP WALL IS TOUCHED
 			invert_ball_speed_y()
@@ -51,17 +55,13 @@ function move_ball(dt)
 	end
 
 	-- BOUNCE THE BALL AGAINST THE BOTTOM SIDE OF THE SCREEN
-	if ball.speed_y == ball_speed then
+	if ball.speed_y > 0 then
 		if ball.y + ball.height >= love.graphics.getHeight() - screen_padding
 		then
 			-- TOP WALL IS TOUCHED
 			invert_ball_speed_y()
 		end
 	end
-
-	-- MOVE THE BALL
-	ball.x = ball.x + ball.speed_x
-	ball.y = ball.y + ball.speed_y
 
 	-- ADD A TRAIL EFFECT TO THE BALL
 	-- Add a ball "ghost" to the trail array
