@@ -65,11 +65,11 @@ function move_ball(dt)
 
 	-- ADD A TRAIL EFFECT TO THE BALL
 	-- Add a ball "ghost" to the trail array
-	local ball_trail = {}
-	ball_trail.x = ball.x
-	ball_trail.y = ball.y
-	ball_trail.life = 0.5
-	table.insert(arr_ball_trail, ball_trail)
+	local ball_trail = { x = ball.x, y = ball.y, life = 0.5 }
+	local last = arr_ball_trail[#arr_ball_trail]
+	if not last or last.x ~= ball_trail.x or last.y ~= ball_trail.y then
+	    table.insert(arr_ball_trail, ball_trail)
+	end
 
 	for i = #arr_ball_trail, 1, -1 do
 		local trail = arr_ball_trail[i]
