@@ -10,7 +10,6 @@ score2 = 0
 pad1 = {}
 pad2 = {}
 ball = {}
-arr_ball_trail = {}
 
 function initialize_window()
 	love.window.setTitle('PONG')
@@ -40,8 +39,8 @@ function initialize_data()
 	ball.height = 20
 	-- ball.x: in center_ball()
 	-- ball.y: in center_ball()
-	-- ball.speed_x: in ball_sent_to_the_right() / ball_sent_to_the_left()
-	-- ball.speed_y: in ball_sent_to_the_right() / ball_sent_to_the_left()
+	-- ball.dx: in ball_sent_to_the_right() / ball_sent_to_the_left()
+	-- ball.dy: in ball_sent_to_the_right() / ball_sent_to_the_left()
 
 	start_game(1)
 end
@@ -74,11 +73,11 @@ function center_ball()
 end
 
 function ball_sent_to_the_right()
-	ball.speed_x = ball_speed
-	ball.speed_y = ball_speed
+	ball.dx = ball_speed
+	ball.dy = ball_speed
 end
 
 function ball_sent_to_the_left()
-	ball.speed_x = -ball_speed
-	ball.speed_y = -ball_speed
+	ball.dx = -ball_speed
+	ball.dy = -ball_speed
 end

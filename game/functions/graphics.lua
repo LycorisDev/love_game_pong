@@ -153,14 +153,56 @@ function draw_pads()
 end
 
 function draw_ball_trail()
-	love.graphics.setLineWidth(4)
+	local num_ghosts = 20
+	local spacing = 0.02
+	local ghost_x = ball.x
+	local ghost_y = ball.y
+	local vx = -ball.dx
+	local vy = -ball.dy
 
-	for i = 1, #arr_ball_trail do
-		local ghost = arr_ball_trail[i]
-		-- Set the opacity: <= 0.5, then divided by 2 because it's too intense
-		local alpha = ghost.life / 2
+	for i = 1, num_ghosts do
+		local next_x = ghost_x + vx * spacing
+		local next_y = ghost_y + vy * spacing
+
+		if vx < 0 then
+			if next_x <= pad1.x + pad1.width and next_y + ball.height >= pad1.y
+			and next_y <= pad1.y + pad1.height then
+				vx = -vx
+				next_x = pad1.x + pad1.width + (pad1.x + pad1.width - next_x)
+			elseif next_x <= screen_padding then
+				vx = -vx
+				next_x = screen_padding + (screen_padding - next_x)
+			end
+		end
+		if vx > 0 then
+			if next_x + ball.width >= pad2.x and next_y + ball.height >= pad2.y
+			and next_y <= pad2.y + pad2.height then
+				vx = -vx
+				next_x = pad2.x - ball.width - ((next_x + ball.width) - pad2.x)
+			elseif next_x + ball.width >= love.graphics.getWidth()
+			- screen_padding then
+				vx = -vx
+				next_x = (love.graphics.getWidth() - screen_padding) * 2
+					- (next_x + ball.width) - ball.width
+			end
+		end
+		if vy < 0 and next_y <= screen_padding then
+			vy = -vy
+			next_y = screen_padding + (screen_padding - next_y)
+		end
+		if vy > 0 and next_y + ball.height >= love.graphics.getHeight()
+		- screen_padding then
+			vy = -vy
+			next_y = (love.graphics.getHeight() - screen_padding) * 2
+				- (next_y + ball.height) - ball.height
+		end
+
+		ghost_x = next_x
+		ghost_y = next_y
+
+		local alpha = (1 - (i / num_ghosts)) / 3
 		love.graphics.setColor(get_love_color("CDE2FC", alpha))
-		love.graphics.rectangle("fill", ghost.x, ghost.y, ball.width,
+		love.graphics.rectangle("fill", ghost_x, ghost_y, ball.width,
 			ball.height)
 	end
 end
